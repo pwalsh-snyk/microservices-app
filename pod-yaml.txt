@@ -1,0 +1,318 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2024-08-12T16:07:47Z"
+  generateName: snyk-monitor-9ffbd4d88-
+  labels:
+    app.kubernetes.io/instance: snyk-monitor
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: snyk-monitor
+    pod-template-hash: 9ffbd4d88
+  name: snyk-monitor-9ffbd4d88-8pd7p
+  namespace: snyk-monitor
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: snyk-monitor-9ffbd4d88
+    uid: 03b78d3d-61ba-458a-8f96-82e1ec39e317
+  resourceVersion: "122069"
+  uid: 3e3c0d7a-724f-4c73-801c-c7d7f8bc09b8
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/arch
+            operator: In
+            values:
+            - amd64
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+  containers:
+  - env:
+    - name: NODE_EXTRA_CA_CERTS
+      value: /srv/app/certs/ca.pem
+    - name: SNYK_INTEGRATION_ID
+      valueFrom:
+        secretKeyRef:
+          key: integrationId
+          name: snyk-monitor
+    - name: SNYK_SERVICE_ACCOUNT_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          key: serviceAccountApiToken
+          name: snyk-monitor
+          optional: true
+    - name: SNYK_WATCH_NAMESPACE
+    - name: SNYK_DEPLOYMENT_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: SNYK_DEPLOYMENT_NAME
+      value: snyk-monitor
+    - name: SNYK_INTEGRATION_API
+    - name: SNYK_CLUSTER_NAME
+      value: Online-Boutique
+    - name: SNYK_MONITOR_VERSION
+      value: 2.15.4
+    - name: HOME
+      value: /srv/app
+    - name: CLOUDSDK_CONFIG
+      value: /var/tmp/gcloud
+    - name: HTTP_PROXY
+    - name: HTTPS_PROXY
+    - name: NO_PROXY
+    - name: USE_KEEPALIVE
+      value: "true"
+    - name: LOG_LEVEL
+    - name: SKIP_K8S_JOBS
+    - name: SNYK_SKOPEO_COMPRESSION_LEVEL
+      value: "6"
+    - name: SNYK_WORKERS_COUNT
+      value: "5"
+    - name: SNYK_SYSDIG_POLLING_INTERVAL_MINS
+      value: "30"
+    - name: V8_MAX_OLD_SPACE_SIZE
+      value: "2048"
+    - name: UV_THREADPOOL_SIZE
+      value: "24"
+    - name: NODE_OPTIONS
+      value: --max_old_space_size=2048
+    image: snyk/kubernetes-monitor:2.15.4
+    imagePullPolicy: Always
+    livenessProbe:
+      exec:
+        command:
+        - "true"
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    name: snyk-monitor
+    readinessProbe:
+      exec:
+        command:
+        - "true"
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    resources:
+      limits:
+        cpu: 250m
+        ephemeral-storage: 1Gi
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        ephemeral-storage: 1Gi
+        memory: 512Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /srv/app/.docker
+      name: docker-config
+      readOnly: true
+    - mountPath: /var/tmp
+      name: temporary-storage
+    - mountPath: /srv/app/certs
+      name: ssl-certs
+    - mountPath: /tmp/policies
+      name: workload-policies
+      readOnly: true
+    - mountPath: /srv/app/.config/containers
+      name: registries-conf
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-7m6dp
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  initContainers:
+  - command:
+    - sh
+    - -c
+    - chmod -R go+rwX /var/tmp || true
+    image: busybox:latest
+    imagePullPolicy: Always
+    name: volume-permissions
+    resources:
+      limits:
+        cpu: 100m
+        ephemeral-storage: 1Gi
+        memory: 100Mi
+      requests:
+        cpu: 100m
+        ephemeral-storage: 1Gi
+        memory: 100Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsNonRoot: false
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/tmp
+      name: temporary-storage
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-7m6dp
+      readOnly: true
+  nodeName: gk3-online-boutique-nap-w0xmibkf-89a0fe8b-qf9m
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: gke.io/optimize-utilization-scheduler
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  serviceAccount: snyk-monitor
+  serviceAccountName: snyk-monitor
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoSchedule
+    key: kubernetes.io/arch
+    operator: Equal
+    value: amd64
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: docker-config
+    secret:
+      defaultMode: 420
+      items:
+      - key: dockercfg.json
+        path: config.json
+      optional: true
+      secretName: snyk-monitor
+  - emptyDir:
+      sizeLimit: 50Gi
+    name: temporary-storage
+  - configMap:
+      defaultMode: 420
+      name: snyk-monitor-certs
+      optional: true
+    name: ssl-certs
+  - configMap:
+      defaultMode: 420
+      name: snyk-monitor-workload-policies
+      optional: true
+    name: workload-policies
+  - configMap:
+      defaultMode: 420
+      name: snyk-monitor-registries-conf
+      optional: true
+    name: registries-conf
+  - name: kube-api-access-7m6dp
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2024-08-12T16:23:44Z"
+    status: "False"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2024-08-12T16:07:51Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2024-08-12T16:23:44Z"
+    reason: PodFailed
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2024-08-12T16:23:44Z"
+    reason: PodFailed
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2024-08-12T16:07:48Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://db24119e14592cf72be8de71d73ec0e5977127dbf24250c4f142cd26882e2fda
+    image: docker.io/snyk/kubernetes-monitor:2.15.4
+    imageID: docker.io/snyk/kubernetes-monitor@sha256:ae0e18fbfdcdaafc5c3c85585ddcca6b43000a5d789fa3587a3d512c26c5648a
+    lastState:
+      terminated:
+        containerID: containerd://ee4e043e25471b494970062a05447d60e885606ee0cdaf3470ab9a4ef0c6ba4a
+        exitCode: 137
+        finishedAt: "2024-08-12T16:13:52Z"
+        reason: OOMKilled
+        startedAt: "2024-08-12T16:08:39Z"
+    name: snyk-monitor
+    ready: false
+    restartCount: 1
+    started: false
+    state:
+      terminated:
+        containerID: containerd://db24119e14592cf72be8de71d73ec0e5977127dbf24250c4f142cd26882e2fda
+        exitCode: 143
+        finishedAt: "2024-08-12T16:23:43Z"
+        reason: Error
+        startedAt: "2024-08-12T16:13:53Z"
+  hostIP: 10.128.0.8
+  hostIPs:
+  - ip: 10.128.0.8
+  initContainerStatuses:
+  - containerID: containerd://994b4beda676478beede82c989188fad7046f877e68aa0efab9c3ff0789ea8a9
+    image: docker.io/library/busybox:latest
+    imageID: docker.io/library/busybox@sha256:9ae97d36d26566ff84e8893c64a6dc4fe8ca6d1144bf5b87b2b85a32def253c7
+    lastState: {}
+    name: volume-permissions
+    ready: true
+    restartCount: 0
+    started: false
+    state:
+      terminated:
+        containerID: containerd://994b4beda676478beede82c989188fad7046f877e68aa0efab9c3ff0789ea8a9
+        exitCode: 0
+        finishedAt: "2024-08-12T16:07:50Z"
+        reason: Completed
+        startedAt: "2024-08-12T16:07:50Z"
+  message: 'Pod ephemeral local storage usage exceeds the total limit of containers
+    1Gi. '
+  phase: Failed
+  podIP: 10.69.128.168
+  podIPs:
+  - ip: 10.69.128.168
+  qosClass: Guaranteed
+  reason: Evicted
+  startTime: "2024-08-12T16:07:48Z"

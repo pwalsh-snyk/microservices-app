@@ -1,0 +1,11 @@
+volumes:
+  projected:
+    serviceAccountToken: true
+    
+securityContext:
+  fsGroup: 65534
+
+rbac:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::905418282044:role/eksctl-snyk-demo-cluster-nodegroup-NodeInstanceRole-7XuCaBgpqasZ

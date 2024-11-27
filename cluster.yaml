@@ -1,0 +1,19 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: snyk-demo-cluster
+  region: us-west-2
+  version: "1.27"
+
+nodeGroups:
+  - name: ng-arm64
+    instanceType: t4g.medium  # Use `t4g` instances for ARM64 architecture
+    desiredCapacity: 3
+    volumeSize: 50
+
+  - name: ng-x86
+    instanceType: t3.medium  # Use x86-compatible instances
+    desiredCapacity: 2
+    volumeSize: 50
+

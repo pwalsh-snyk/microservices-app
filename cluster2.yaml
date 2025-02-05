@@ -2,14 +2,14 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: online-boutique
+  name: juice-shop
   region: us-west-2
   version: "1.27"
 
 nodeGroups:
   - name: ng-arm64
     instanceType: t4g.medium  # Use `t4g` instances for ARM64 architecture
-    desiredCapacity: 3
+    desiredCapacity: 2
     volumeSize: 50
 
   - name: ng-x86

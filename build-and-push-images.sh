@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ECR base URI
-ECR_URI="905418282044.dkr.ecr.us-west-2.amazonaws.com/online-boutique"
+ECR_URI="730335571577.dkr.ecr.us-west-2.amazonaws.com/online-boutique"
 AWS_REGION="us-west-2"
 
 # List of images and their contexts
